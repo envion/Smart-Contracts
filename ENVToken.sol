@@ -18,8 +18,8 @@ contract ENVToken is StandardToken, usingOraclize {
     string public constant version = "0.9";
 
     // Fundraising goals: minimums and maximums
-    uint256 public constant TOKEN_CREATION_CAP = 150 * (10**6) * 10**decimals; // 150 million ENVs
-    uint256 public constant TOKEN_CREATED_MIN = 1 * (10**6) * 10**decimals;    // 1 million ENVs
+    uint256 public constant TOKEN_CREATION_CAP = 150 * (10**6) * 10**decimals; // 150 million EVNs
+    uint256 public constant TOKEN_CREATED_MIN = 1 * (10**6) * 10**decimals;    // 1 million EVNs
     uint256 public constant ETH_RECEIVED_CAP = 5333 * (10**2) * 10**decimals;  // 533 300 ETH
     uint256 public constant ETH_RECEIVED_MIN = 1 * (10**3) * 10**decimals;     // 1 000 ETH
     uint256 public constant TOKEN_MIN = 1 * 10**decimals;                      // 1 EVN
@@ -279,8 +279,8 @@ contract ENVToken is StandardToken, usingOraclize {
             newOraclizeQuery("Oraclize query was NOT sent, please add some ETH to cover for the query fee");
         } else {
             newOraclizeQuery("Oraclize sent, wait..");
-            // Schedule query in 1 hour. Set the gas amount to 100000, as parsing in __callback takes around 70000 - we play it safe.
-            oraclize_query(3600, "URL", "json(https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD).USD", 100000);
+            // Schedule query in 1 hour. Set the gas amount to 220000, as parsing in __callback takes around 70000 - we play it safe.
+            oraclize_query(3600, "URL", "json(https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD).USD", 220000);
         }
     }
     //// oraclize END
