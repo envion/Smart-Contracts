@@ -13,7 +13,7 @@ contract ENVToken is StandardToken, usingOraclize {
 
     // Token metadata
     string public constant name = "Envion";
-    string public constant symbol = "ENV";
+    string public constant symbol = "EVN";
     uint256 public constant decimals = 18;
     string public constant version = "0.9";
 
@@ -21,8 +21,8 @@ contract ENVToken is StandardToken, usingOraclize {
     uint256 public constant TOKEN_CREATION_CAP = 150 * (10**6) * 10**decimals; // 150 million ENVs
     uint256 public constant TOKEN_CREATED_MIN = 1 * (10**6) * 10**decimals;    // 1 million ENVs
     uint256 public constant ETH_RECEIVED_CAP = 5333 * (10**2) * 10**decimals;  // 533 300 ETH
-    uint256 public constant ETH_RECEIVED_MIN = 3 * (10**3) * 10**decimals;     // 3 000 ETH
-    uint256 public constant TOKEN_MIN = 1 * 10**decimals;                      // 1 ENV
+    uint256 public constant ETH_RECEIVED_MIN = 1 * (10**3) * 10**decimals;     // 1 000 ETH
+    uint256 public constant TOKEN_MIN = 1 * 10**decimals;                      // 1 EVN
 
     // Discount multipliers
     uint256 public constant TOKEN_FIRST_DISCOUNT_MULTIPLIER  = 142857; // later divided by 10^5 to give users 1,42857 times more tokens per ETH == 30% discount
