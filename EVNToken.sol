@@ -4,7 +4,7 @@ import "./StandardToken.sol";
 import "./usingOraclize.sol";
 
 /**
- * @title The ENVToken Token contract.
+ * @title The EVNToken Token contract.
  *
  * Credit: Taking ideas from BAT token and NET token
  */
@@ -721,12 +721,12 @@ contract ENVToken is StandardToken, usingOraclize {
         // allow delivery of tokens for the team only after 6 months (182,5) days @14,4s / Block
         require(block.number >= fundingEndBlock + 1095000);
 
-        // Company & Team get 15% of a whole final pie, meaning we have to add ~17% to the
-        // current totalSupply now, basically stretching it and taking 15% from the result, so the 85% that remain equals the amount of tokens created right now.
-        // e.g. (85 * x = 100, where x amounts to roughly about 1.17647 and 15 would be the team's part)
-        uint256 newTotalSupply = safeMulPercentage(totalSupply, 117647);
+        // Team gets 15% of a whole final pie, meaning we have to add ~11% to the
+        // current totalSupply now, basically stretching it and taking 10% from the result, so the 90% that remain equals the amount of tokens created right now.
+        // e.g. (90 * x = 100, where x amounts to roughly about 1.11111 and 10 would be the team's part)
+        uint256 newTotalSupply = safeMulPercentage(totalSupply, 111111);
 
-        // give the team their 15% 
+        // give the team their 10% 
         uint256 tokens = SafeMath.sub(newTotalSupply, totalSupply);
         balances[_to] = tokens;
 
