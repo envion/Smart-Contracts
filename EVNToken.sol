@@ -722,7 +722,7 @@ contract ENVToken is StandardToken, usingOraclize {
         
         // company and supporters gets 7% of a whole final pie, meaning we have to add ~7,5% to the
         // current totalSupply now, basically stretching it and taking 7% from the result, so the 93% that remain equals the amount of tokens created right now.
-        // e.g. (93 * x = 100, where x amounts to roughly about 1.07526 and 10 would be the team's part)
+        // e.g. (93 * x = 100, where x amounts to roughly about 1.07526 and 7 would be the team's part)
         uint256 newTotalSupply = safeMulPercentage(totalSupply, 107526);
 
         // give company and supporters their 7% 
