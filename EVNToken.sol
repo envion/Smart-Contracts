@@ -718,15 +718,14 @@ contract ENVToken is StandardToken, usingOraclize {
         require(teamTokensDelivered == false);
         require(_to != 0x0);
 
-        // allow delivery of tokens for the team only after 6 months (182,5) days @14,4s / Block
-        require(block.number >= fundingEndBlock + 1095000);
+        // allow delivery of tokens for the company and supporters without vesting, team tokens will be supplied like a CC purchase.
+        
+        // company and supporters gets 7% of a whole final pie, meaning we have to add ~7,5% to the
+        // current totalSupply now, basically stretching it and taking 7% from the result, so the 93% that remain equals the amount of tokens created right now.
+        // e.g. (93 * x = 100, where x amounts to roughly about 1.07526 and 10 would be the team's part)
+        uint256 newTotalSupply = safeMulPercentage(totalSupply, 107526);
 
-        // Team gets 15% of a whole final pie, meaning we have to add ~11% to the
-        // current totalSupply now, basically stretching it and taking 10% from the result, so the 90% that remain equals the amount of tokens created right now.
-        // e.g. (90 * x = 100, where x amounts to roughly about 1.11111 and 10 would be the team's part)
-        uint256 newTotalSupply = safeMulPercentage(totalSupply, 111111);
-
-        // give the team their 10% 
+        // give company and supporters their 7% 
         uint256 tokens = SafeMath.sub(newTotalSupply, totalSupply);
         balances[_to] = tokens;
 
