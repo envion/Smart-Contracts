@@ -18,7 +18,7 @@ contract ENVToken is StandardToken, usingOraclize {
     string public constant version = "0.9";
 
     // Fundraising goals: minimums and maximums
-    uint256 public constant TOKEN_CREATION_CAP = 120 * (10**6) * 10**decimals; // 120 million EVNs
+    uint256 public constant TOKEN_CREATION_CAP = 120 * (10**6) * 10**decimals; // 130 million EVNs
     uint256 public constant TOKEN_CREATED_MIN = 1 * (10**6) * 10**decimals;    // 1 million EVNs
     uint256 public constant ETH_RECEIVED_CAP = 5333 * (10**2) * 10**decimals;  // 533 300 ETH
     uint256 public constant ETH_RECEIVED_MIN = 1 * (10**3) * 10**decimals;     // 1 000 ETH
