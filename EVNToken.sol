@@ -540,10 +540,11 @@ contract ENVToken is StandardToken, usingOraclize {
         LogCancelDelivery(purchases[_purchaseID].buyer, _purchaseID);
     }
 
-    // @dev Deliver tokens sold for CC/fiat
+    // @dev Deliver tokens sold for CC/fiat and BTC
     // @dev param _tokens in Cents, e.g. 1 Token == 1$, passed as 100 cents
+    // @dev param _btcBuyer Boolean to determine if the delivered tokens need to be locked (not the case for BTC buyers, their payment is final)
     // @dev discount multipliers are applied off-contract in this case
-    function deliverTokens(address _to, uint256 _tokens, string _purchaseId)
+    function deliverTokens(address _to, uint256 _tokens, string _purchaseId, bool _btcBuyer)
     external
     isFundraising
     onlyVendor
@@ -577,7 +578,11 @@ contract ENVToken is StandardToken, usingOraclize {
         });
         purchaseArray.push(_purchaseId);
 
+        // if tokens were not paid with BTC (but credit card), they need to be locked up 
+        if (_btcBuyer == false) {
         ccLockedUpBalances[_to] = SafeMath.add(ccLockedUpBalances[_to], tokens); // update user's locked up token balance
+        }
+
         balances[_to] = SafeMath.add(balances[_to], tokens);                     // safeAdd not needed; bad semantics to use here
         trackHolder(_to);                                                        // log holder's address
 
