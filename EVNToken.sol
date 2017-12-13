@@ -9,7 +9,7 @@ import "./usingOraclize.sol";
  * Credit: Taking ideas from BAT token and NET token
  */
  /*is StandardToken */
-contract ENVToken is StandardToken, usingOraclize {
+contract EVNToken is StandardToken, usingOraclize {
 
     // Token metadata
     string public constant name = "Envion";
@@ -87,8 +87,8 @@ contract ENVToken is StandardToken, usingOraclize {
 
     // Events used for logging
     event LogRefund(address indexed _to, uint256 _value);
-    event LogCreateENV(address indexed _to, uint256 _value);
-    event LogDeliverENV(address indexed _to, uint256 _value);
+    event LogCreateEVN(address indexed _to, uint256 _value);
+    event LogDeliverEVN(address indexed _to, uint256 _value);
     event LogCancelDelivery(address indexed _to, string _id);
     event LogKycRefused(address indexed _user, uint256 _value);
     event LogTeamTokensDelivered(address indexed distributor, uint256 _value);
@@ -185,7 +185,7 @@ contract ENVToken is StandardToken, usingOraclize {
     }
 
     /**
-     * @dev Create a new ENVToken contract.
+     * @dev Create a new EVNToken contract.
      *
      *  _fundingStartBlock The starting block of the fundraiser (has to be in the future).
      *  _fundingEndBlock The end block of the fundraiser (has to be after _fundingStartBlock).
@@ -196,7 +196,7 @@ contract ENVToken is StandardToken, usingOraclize {
      *  _admin2 The second admin account that owns this contract.
      *  _tokenVendor The account that creates tokens for credit card / fiat contributers.
      */
-    function ENVToken(
+    function EVNToken(
         uint256 _fundingStartBlock,
         uint256 _fundingEndBlock,
         uint256 _roundTwoBlock, // block number that triggers the first exchange rate change
@@ -375,7 +375,7 @@ contract ENVToken is StandardToken, usingOraclize {
     }
 
 
-    /// @dev Accepts ether and creates new ENV tokens
+    /// @dev Accepts ether and creates new EVN tokens
     function createTokens()
     payable
     external
@@ -434,7 +434,7 @@ contract ENVToken is StandardToken, usingOraclize {
         isIcoBuyer[msg.sender] = true;
 
         // Log the creation of these tokens
-        LogCreateENV(msg.sender, tokens);
+        LogCreateEVN(msg.sender, tokens);
     }
 
     //add a user to the KYC team
@@ -493,8 +493,8 @@ contract ENVToken is StandardToken, usingOraclize {
         // we're managing kyc refusing of CC contributors off-chain
         require(noKycEthBalances[_user]>0);
 
-        uint256 ENVVal = balances[_user];
-        require(ENVVal > 0);
+        uint256 EVNVal = balances[_user];
+        require(EVNVal > 0);
 
         uint256 ethVal = noKycEthBalances[_user]; // refund un-KYCd eth
         require(ethVal > 0);
@@ -503,7 +503,7 @@ contract ENVToken is StandardToken, usingOraclize {
         allUnKycedEth = SafeMath.sub(allUnKycedEth, noKycEthBalances[_user]); // or if there was any unKYCed Eth, subtract it from the total unKYCed eth balance.
         balances[_user] = ccLockedUpBalances[_user]; // assign user only the token amount he has bought through CC, if there are any.
         noKycEthBalances[_user] = 0;
-        totalSupply = SafeMath.sub(totalSupply, ENVVal); // Extra safe
+        totalSupply = SafeMath.sub(totalSupply, EVNVal); // Extra safe
 
         // Log this refund
         LogKycRefused(_user, ethVal);
@@ -553,7 +553,7 @@ contract ENVToken is StandardToken, usingOraclize {
         require(_tokens > 0);
         require(bytes(_purchaseId).length>0);
         require(block.number >= fundingStartBlock);
-        require(block.number <= fundingEndBlock + 84000); // allow delivery of tokens sold for fiat for 14 days after end of ICO for safety reasons
+        require(block.number <= fundingEndBlock + 168000); // allow delivery of tokens sold for fiat for 28 days after end of ICO for safety reasons
 
         // calculate the total amount of tokens and cut out the extra two decimal units,
         // because _tokens was in cents.
@@ -591,7 +591,7 @@ contract ENVToken is StandardToken, usingOraclize {
         isIcoBuyer[_to] = true;
 
         // Log the creation of these tokens
-        LogDeliverENV(_to, tokens);
+        LogDeliverEVN(_to, tokens);
    }
 
     /// @dev Returns the current token price
@@ -639,7 +639,7 @@ contract ENVToken is StandardToken, usingOraclize {
     onlyOwner  // Only the admins calling this method exactly the same way can finalize the sale.
     {
         // Only allow to finalize the contract before the ending block if we already reached any of the two caps
-        require(block.number > fundingEndBlock || totalSupply >= TOKEN_CREATION_CAP || allReceivedEth >= ETH_RECEIVED_CAP);
+        require(block.number > fundingEndBlock || totalSupply >= TOKEN_CREATED_MIN || allReceivedEth >= ETH_RECEIVED_MIN);
         // make sure a recipient was defined !
         require (_safe != 0x0);
 
@@ -688,9 +688,9 @@ contract ENVToken is StandardToken, usingOraclize {
         // to prevent CC buyers from accidentally calling refund and burning their tokens
         require (ethBalances[msg.sender] > 0 || noKycEthBalances[msg.sender] > 0);
 
-        // Only refund if there are ENV tokens
-        uint256 ENVVal = balances[msg.sender];
-        require(ENVVal > 0);
+        // Only refund if there are EVN tokens
+        uint256 EVNVal = balances[msg.sender];
+        require(EVNVal > 0);
 
         // refunds either KYCed eth or un-KYCd eth
         uint256 ethVal = SafeMath.add(ethBalances[msg.sender], noKycEthBalances[msg.sender]);
@@ -704,7 +704,7 @@ contract ENVToken is StandardToken, usingOraclize {
         balances[msg.sender] = 0;
         ethBalances[msg.sender] = 0;
         noKycEthBalances[msg.sender] = 0;
-        totalSupply = SafeMath.sub(totalSupply, ENVVal); // Extra safe
+        totalSupply = SafeMath.sub(totalSupply, EVNVal); // Extra safe
 
         // Log this refund
         LogRefund(msg.sender, ethVal);
